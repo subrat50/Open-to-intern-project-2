@@ -1,39 +1,61 @@
 const mongoose = require("mongoose")
-// const jwt = require("jsonwebtoken");
 const internModel = require("../models/internModel")
+const collegeModel = require("../models/collegeModel")
+
 
 const isValid = function (value) {
-    if (typeof value === "undefined" || value === null) return false;
-    if (typeof value === "string" && value.trim().length === 0) return false;
-    if (typeof value === "string")
+  if (typeof value === "undefined" || value === null) return false;
+  if (typeof value === "string" && value.trim().length === 0) return false;
+  if (typeof value === "string")
     return true;
 };
 
-const isvalidRequest=function(requestBody){
-    return Object.keys(requestBody).length >0
-  }
-  
+const isvalidRequest = function (requestBody) {
+  return Object.keys(requestBody).length > 0
+}
 
 
-const createIntern = async function(req,res){
-    try{
-        const requestBody=req.body
-      if(!isvalidRequest(requestBody)){
-        return res.status(400).send({status:false,msg:"invalid request parameter ,please provied author detail"})
-      }
-        let { name, email, mobile, collegeId} = requestBody
-      if(!isValid(name)) return res.status(400).send({status:false, msg:"Name is required"})
 
-      
-    
+const createIntern = async function (req, res) {
+  try {
+    const requestBody = req.body
+    if (!isvalidRequest(requestBody)) {
+      return res.status(400).send({ status: false, message: "invalid request parameter ,please provied intern detail" })
+    }
+    let { name, email, mobile, collegeName } = requestBody
+    if (!name) return res.status(400).send({ status: false, message: "Name is required" })
+    if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is invalid" })
+
+
+    if (!isValid(email)) return res.status(400).send({ status: false, message: "email is required" })
+
+    if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email))) return res.status(400).send({ status: false, message: "email Id is invalid" })
+
+    let Email = await internModel.findOne({ email })
+    if (Email) return res.status(404).send({ status: false, message: "email is already used" })
+
+
+    if (!isValid(mobile)) return res.status(400).send({ status: false, message: "mobile is required" })
+    let checkMobile = await internModel.findOne({ mobile })
+    if (checkMobile) return res.status(404).send({ status: false, message: "Mobile Number is already used" })
+    if(!(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(mobile)))  return res.status(400).send({ status: false, message: "Mobile No is invalid" })
+
+    if (!collegeName) return res.status(400).send({ status: false, message: "collegeName is required" })
+    if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "collegeName is invalid" })
+
+
+
+    let nameCheck = await collegeModel.findOne({ name: requestBody.collegeName })
+    if(!nameCheck) return res.status(404).send({status:false,message:"no such college is present"})
+    requestBody.collegeId = nameCheck._id
     let saveData = await internModel.create(requestBody)
-    return res.status(201).send({status:true, data:saveData})
-}catch(err){
+    return res.status(201).send({ status: true, data: saveData })
+  } catch (err) {
     console.log(err)
-    return res.send({msg:err.message})
-}
+    return res.status(500).send({status: false,message: err.message })
+  }
 }
 
-module.exports= {
-    createIntern,
+module.exports = {
+  createIntern,
 }
