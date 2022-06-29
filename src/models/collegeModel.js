@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const mongooseUrl = require('mongoose-type-url');
 require('mongoose-type-url')
 
 
@@ -17,8 +16,7 @@ const collegeSchema = new mongoose.Schema({
     },
     logoLink:{
         type: mongoose.SchemaTypes.Url,
-        require: true,
-        unique: true
+        require: true
     },
     isDeleted:{
 

@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// const mongooseUrl = require('mongoose-type-url');
-
 
 
 const internSchema = new mongoose.Schema({
@@ -13,11 +11,7 @@ const internSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
-        validate:{validator: function(email){
-            return (!(/'[a-z0-9]+@[a-z]+\.edu\.[a-z]{2,3}'/.test(email)))
-        }, message: "please enter valid email", isAsync: false
-    }
+        unique: true
     },
     mobile: {
         type: String,
