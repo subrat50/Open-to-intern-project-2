@@ -11,19 +11,13 @@ const internSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true
     },
     mobile: {
         type: String,
         required: true,
-        unique: true,
-        validate: {validator: function validatePhoneNumber(mobile) 
-        {
-            var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-        
-            return re.test(mobile);
-        }
-    }
+        unique: true
 
     },
     collegeId:{

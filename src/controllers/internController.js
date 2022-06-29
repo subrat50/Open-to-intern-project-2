@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const internModel = require("../models/internModel")
 const collegeModel = require("../models/collegeModel")
 
@@ -6,7 +5,7 @@ const collegeModel = require("../models/collegeModel")
 const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
   if (typeof value === "string" && value.trim().length === 0) return false;
-  if (typeof value === "string")
+  if (typeof value === "number") return false
     return true;
 };
 
@@ -38,16 +37,16 @@ const createIntern = async function (req, res) {
     if (!isValid(mobile)) return res.status(400).send({ status: false, message: "mobile is required" })
     let checkMobile = await internModel.findOne({ mobile })
     if (checkMobile) return res.status(404).send({ status: false, message: "Mobile Number is already used" })
-    if(!(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(mobile)))  return res.status(400).send({ status: false, message: "Mobile No is invalid" })
+    // if(!(.test(mobile)))  return res.status(400).send({ status: false, message: "Mobile No is invalid" })
 
     if (!collegeName) return res.status(400).send({ status: false, message: "collegeName is required" })
     if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "collegeName is invalid" })
 
 
 
-    let nameCheck = await collegeModel.findOne({ name: requestBody.collegeName })
-    if(!nameCheck) return res.status(404).send({status:false,message:"no such college is present"})
-    requestBody.collegeId = nameCheck._id
+    let collegeDoc = await collegeModel.findOne({ name: requestBody.collegeName })
+    if(!collegeDoc) return res.status(404).send({status:false,message:"no such college is present"})
+    requestBody.collegeId = collegeDoc._id
     let saveData = await internModel.create(requestBody)
     return res.status(201).send({ status: true, data: saveData })
   } catch (err) {

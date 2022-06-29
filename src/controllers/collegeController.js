@@ -6,7 +6,7 @@ const internModel = require("../models/internModel")
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length === 0) return false;
-    if (typeof value === "string")
+    if (typeof value === "number") return false
         return true;
 };
 
@@ -46,23 +46,23 @@ const getCollegeDetails = async function (req, res) {
     try {
         let query = req.query
         if(!(isvalidRequest(query))) return res.status(400).send({ status: false, msg: "provide request parameter " })
-        if(!(isValid(query))) return res.status(400).send({status:false,message:"provide data"})
+        if(!query.name.trim().length) return res.status(400).send({status:false,message:"provide data"})
 
         let getDetails = await collegeModel.findOne(query).select({ name: 1, fullName: 1, logoLink: 1, _id: 1 })
         if(!getDetails) return res.status(404).send({status:false, message:"no such college found"})
 
         let internDetails = await internModel.find({ collegeId: getDetails._id }).select({ name: 1, email: 1, mobile: 1 })
-        if(internDetails.length==0) return res.status(404).send({status:false, message:"no intern found"})
         let name = getDetails.name;
         let fullName = getDetails.fullName;
         let logoLink = getDetails.logoLink;
-
+        
         let collegeData = {
             name: name,
             fullName: fullName,
             logoLink: logoLink,
             interns: internDetails
         }
+        if(internDetails.length==0) return res.status(200).send({status:true, data: collegeData, message:"no intern found"})
         return res.status(200).send({ status: true, data: collegeData })
     } catch (err) {
         console.log(err)
