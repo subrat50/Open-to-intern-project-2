@@ -38,7 +38,7 @@ const createIntern = async function (req, res) {
     if (!isValid(mobile)) return res.status(400).send({ status: false, message: "mobile is required" })
     let checkMobile = await internModel.findOne({ mobile })
     if (checkMobile) return res.status(404).send({ status: false, message: "Mobile Number is already used" })
-    if(!(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(mobile)))  return res.status(400).send({ status: false, message: "Mobile No is invalid" })
+    if(!(/^[6-9]{1}[0-9]{9}$/im.test(mobile)))  return res.status(400).send({ status: false, message: "Mobile No is invalid +91 is not required" })
 
     if (!collegeName) return res.status(400).send({ status: false, message: "collegeName is required" })
     if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "collegeName is invalid" })
