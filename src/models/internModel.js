@@ -13,6 +13,7 @@ const internSchema = new mongoose.Schema({
         required: true,
         unique: true,
         lowercase: true
+
     },
     mobile: {
         type: String,
@@ -25,7 +26,6 @@ const internSchema = new mongoose.Schema({
         ref: "College"
     },
     isDeleted:{
-
         type: Boolean,
         default: false
     }
