@@ -9,6 +9,12 @@ router.post("/functionup/interns",internController.createIntern)
 
 router.get("/functionup/collegeDetails",collegeController.getCollegeDetails)
 
+router.all("/**", function (req, res) {
+    res.status(400).send({
+        status: false,
+        msg: "The api you request is not available"
+    })
+})
 
 
 

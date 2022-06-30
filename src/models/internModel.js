@@ -12,19 +12,13 @@ const internSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase:true
+        lowercase: true
+
     },
     mobile: {
         type: String,
         required: true,
-        unique: true,
-        validate: {validator: function validatePhoneNumber(mobile) 
-        {
-            var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-        
-            return re.test(mobile);
-        }
-    }
+        unique: true
 
     },
     collegeId:{
@@ -32,7 +26,6 @@ const internSchema = new mongoose.Schema({
         ref: "College"
     },
     isDeleted:{
-
         type: Boolean,
         default: false
     }
