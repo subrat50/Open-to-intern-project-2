@@ -6,12 +6,12 @@
     "module": "^1.2.5",
     "mongoose": "^6.4.1",
     "mongoose-type-url": "^2.1.0",
-    "nodemon": "^2.0.18"
+    "nodemon": "^2.0.18",
+    "valid-url": "^1.0.9"
   },
   "name": "open-to-intern",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
