@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 const link = require('valid-url')
-
+//===========================validation======================================================
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length === 0) return false;
@@ -14,7 +14,7 @@ const isvalidRequest = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }
 
-
+//==========================================create college============================
 const createCollege = async function (req, res) {
     try {
         const requestBody = req.body
@@ -33,7 +33,7 @@ const createCollege = async function (req, res) {
         if (!logoLink) return res.status(400).send({ status: false, msg: "Logo Link is required" })
         if(typeof logoLink!== "string") return res.status(400).send({ status: false, message: "logo Link is invalid" })
         if (!(link.isWebUri(logoLink))) return res.status(400).send({ status: false, message: "Logo Link is invalid" })
-
+//--------------------------------validation end-----------------
         let saveData = await collegeModel.create(requestBody)
         return res.status(201).send({ status: true, data: saveData })
     } catch (err) {
@@ -42,17 +42,19 @@ const createCollege = async function (req, res) {
     }
 }
 
+//=================================get college deatils with query==========================
+
 const getCollegeDetails = async function (req, res) {
     try {
         let query = req.query
-        // console.log(query)
+         console.log(query)
         if (!(isvalidRequest(query))) return res.status(400).send({ status: false, msg: "provide request parameter " })
         if(!query.collegeName) return res.status(400).send({ status: false, msg: "provide College Name " })
 
         if (!query.collegeName.trim().length) return res.status(400).send({ status: false, message: "provide name of college" })
 
         let getDetails = await collegeModel.findOne({name:query.collegeName}).select({ name: 1, fullName: 1, logoLink: 1, _id: 1 })
-        // console.log(getDetails)
+         console.log(getDetails)
         if (!getDetails) return res.status(404).send({ status: false, message: "no such college found" })
 
         let internDetails = await internModel.find({ collegeId: getDetails._id }).select({ name: 1, email: 1, mobile: 1 })
@@ -66,7 +68,8 @@ const getCollegeDetails = async function (req, res) {
             logoLink: logoLink,
             interns: internDetails
         }
-        if (internDetails.length == 0) return res.status(200).send({ status: true, data:collegeData, message: "no intern found" })
+        // if (internDetails.length == 0) return res.status(200).send({ status: true, data:collegeData, message: "no intern found" })
+        //--------------------------validation end----------------------
         return res.status(200).send({ status: true, data: collegeData })
     } catch (err) {
         console.log(err)

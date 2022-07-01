@@ -1,7 +1,7 @@
 const internModel = require("../models/internModel")
 const collegeModel = require("../models/collegeModel")
 
-
+//============================validation================================
 const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
   if (typeof value === "string" && value.trim().length === 0) return false;
@@ -13,7 +13,7 @@ const isvalidRequest = function (requestBody) {
   return Object.keys(requestBody).length > 0
 }
 
-
+//=================================create intern=============================================
 
 const createIntern = async function (req, res) {
   try {
@@ -42,9 +42,10 @@ const createIntern = async function (req, res) {
     if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "collegeName is invalid" })
 
 
-    let collegeDoc = await collegeModel.findOne({ name: requestBody.collegeName })
+    let collegeDoc = await collegeModel.findOne({ name: requestBody.collegeName })//find college name
     if(!collegeDoc) return res.status(404).send({status:false,message:"no such college is present"})
-    requestBody.collegeId = collegeDoc._id
+    requestBody.collegeId = collegeDoc._id //here we set a collegeid key in request body & response show in postman 
+    //-------------------------Validation end-------------------------------------------
     let saveData = await internModel.create(requestBody)
     return res.status(201).send({ status: true, data: saveData })
   } catch (err) {
