@@ -17,6 +17,7 @@ const isvalidRequest = function (requestBody) {
 
 const createIntern = async function (req, res) {
   try {
+    
     const requestBody = req.body
     if (!isvalidRequest(requestBody)) return res.status(400).send({ status: false, message: "invalid request parameter ,please provied intern detail" })
 

@@ -14,7 +14,9 @@ const isvalidRequest = function (requestBody) {
 
 //==========================================create college============================
 const createCollege = async function (req, res) {
+    
     try {
+        
         const requestBody = req.body
         if (!isvalidRequest(requestBody)) return res.status(400).send({ status: false, message:"invalid request parameter ,please provied college detail" })
 
@@ -27,12 +29,10 @@ const createCollege = async function (req, res) {
 
         if (!fullName) return res.status(400).send({ status: false, message: "fullName is required" })
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "fullName is invalid" })
-
         if (!logoLink) return res.status(400).send({ status: false, msg: "Logo Link is required" })
         if(typeof logoLink!== "string") return res.status(400).send({ status: false, message: "logo Link is invalid" })
-        if(!logoLink.trim().match(/^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)$/)) return res.status(400).send({status:false,message:"provide valid logo link"})
-
-
+        if(!logoLink.trim().match(/(http|https(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)/.test(logoLink)))
+        return res.status(400).send({status:false,message:"provide valid logo link"})
         let saveData = await collegeModel.create(requestBody)
         return res.status(201).send({ status: true, data: saveData })
     } catch (err) {
@@ -44,7 +44,9 @@ const createCollege = async function (req, res) {
 //=================================get college deatils with query==========================
 
 const getCollegeDetails = async function (req, res) {
+    
     try {
+        
         let query = req.query
         if (!(isvalidRequest(query))) return res.status(400).send({ status: false, msg: "provide request parameter " })
         if(!query.collegeName) return res.status(400).send({ status: false, msg: "provide College Name " })
